@@ -1,23 +1,61 @@
+import PropertyCard from "../components/PropertyCard";
 import { properties } from "../services/mockProperties";
+import { useState } from "react";
 
 function PropertiesPage() {
-  return (
-    <main>
-      <h1>Properties</h1>
+    const [searchTerm, setSearchTerm] = useState("");
 
-      {properties.map((property) => (
-        <div key={property.id}>
-          <h2>{property.name}</h2>
+    const filteredProperties = properties.filter((property) => {
+        const search = searchTerm.toLowerCase();
 
-          <p>
-            {property.address}, {property.city}, {property.state}
-          </p>
+        return (
+            property.name.toLowerCase().includes(search) ||
+            property.city.toLowerCase().includes(search) ||
+            property.state.toLowerCase().includes(search)
+        );
+    });
 
-          <p>{property.units} units</p>
-        </div>
-      ))}
-    </main>
-  );
+    const totalUnits = properties.reduce(
+        (total, property) => total + property.units,
+        0
+    );
+
+    const occupiedUnits = properties.reduce(
+        (total, property) => total + property.occupiedUnits,
+        0
+    );
+
+    return (
+        <main>
+            <h1>Properties</h1>
+
+            <p>Manage your Rental Property Portfolio</p>
+
+            <p>
+                {properties.length} properties • {totalUnits} units • {occupiedUnits} occupied
+            </p>
+
+            <input
+                type="text"
+                placeholder="Search properties..."
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+            />
+
+            {filteredProperties.length === 0 ? (
+                <p>No properties found.</p>
+            ) : (
+                <section>
+                    {filteredProperties.map((property) => (
+                        <PropertyCard
+                            key={property.id}
+                            property={property}
+                        />
+                    ))}
+                </section>
+            )}
+        </main>
+    );
 }
 
 export default PropertiesPage;
