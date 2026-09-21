@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Property } from "../types/property";
 import Button from "./Button";
 import "./PropertyCard.css";
@@ -13,6 +14,7 @@ function PropertyCard({ property }: PropertyCardProps) {
             : Math.round(
                 (property.occupiedUnits / property.units) * 100
             );
+    const navigate = useNavigate();
     return (
         <article className="property-card">
             <h2>{property.name}</h2>
@@ -29,7 +31,9 @@ function PropertyCard({ property }: PropertyCardProps) {
 
             <p>Occupancy: {occupancyRate}%</p>
 
-            <Button onClick={() => console.log(property.id)}>
+            <Button
+                onClick={() => navigate(`/properties/${property.id}`)}
+            >
                 View Property
             </Button>
         </article>
