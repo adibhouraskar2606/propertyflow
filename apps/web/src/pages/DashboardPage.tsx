@@ -1,21 +1,80 @@
+import {
+  Card,
+  CardContent,
+  Stack,
+  Typography,
+} from "@mui/material";
+
 function DashboardPage() {
   return (
-    <main>
-      <h1>Dashboard</h1>
+    <>
+      <Typography variant="h4" sx={{ mb: 1 }}>
+        Dashboard
+      </Typography>
 
-      <p>Welcome to PropertyFlow.</p>
+      <Typography
+        color="text.secondary"
+        sx={{ mb: 3 }}
+      >
+        Welcome to PropertyFlow.
+      </Typography>
 
-      <section>
-        <h2>Portfolio Overview</h2>
+      <Stack
+        direction={{
+          xs: "column",
+          md: "row",
+        }}
+        spacing={2}
+      >
+        <Card variant="outlined" sx={{ flex: 1 }}>
+          <CardContent>
+            <Typography color="text.secondary">
+              Properties
+            </Typography>
 
-        <div>
-          <p>Properties: 3</p>
-          <p>Units: 8</p>
-          <p>Occupied Units: 6</p>
-          <p>Open Maintenance Requests: 2</p>
-        </div>
-      </section>
-    </main>
+            <Typography variant="h4">
+              3
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card variant="outlined" sx={{ flex: 1 }}>
+          <CardContent>
+            <Typography color="text.secondary">
+              Units
+            </Typography>
+
+            <Typography variant="h4">
+              17
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card variant="outlined" sx={{ flex: 1 }}>
+          <CardContent>
+            <Typography color="text.secondary">
+              Occupied Units
+            </Typography>
+
+            <Typography variant="h4">
+              13
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card variant="outlined" sx={{ flex: 1 }}>
+          <CardContent>
+            <Typography color="text.secondary">
+              Open Maintenance
+            </Typography>
+
+            <Typography variant="h4">
+              2
+            </Typography>
+          </CardContent>
+        </Card>
+      </Stack>
+    </>
   );
 }
 

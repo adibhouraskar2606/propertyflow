@@ -1,7 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import "./CreatePropertyPage.css";
+import {
+    Box,
+    Button,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
 
 import {
     propertySchema,
@@ -35,135 +41,109 @@ function CreatePropertyPage() {
     };
 
     return (
-        <main>
-            <h1>Add Property</h1>
+        <Box sx={{ maxWidth: 700 }}>
+            <Typography variant="h4" sx={{ mb: 1 }}>
+                Add Property
+            </Typography>
 
-            <p>Add a new property to your portfolio.</p>
+            <Typography
+                color="text.secondary"
+                sx={{ mb: 3 }}
+            >
+                Add a new property to your portfolio.
+            </Typography>
 
-            <form className="property-form"
-                onSubmit={handleSubmit(onSubmit)}>
-                <div className="form-field">
-                    <label htmlFor="name">
-                        Property Name
-                    </label>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Stack spacing={2}>
+                    <TextField
+                        label="Property Name"
+                        fullWidth
+                        {...register("name")}
+                        error={Boolean(errors.name)}
+                        helperText={errors.name?.message}
+                    />
 
-                    <input id="name" type="text" {...register("name")} />
-
-                    {errors.name && (
-                        <p className="form-error">{errors.name.message}</p>
-                    )}
-                </div>
-                <div className="form-field">
-                    <label htmlFor="address">
-                        Street Address
-                    </label>
-
-                    <input
-                        id="address"
-                        type="text"
+                    <TextField
+                        label="Street Address"
+                        fullWidth
                         {...register("address")}
+                        error={Boolean(errors.address)}
+                        helperText={errors.address?.message}
                     />
 
-                    {errors.address && (
-                        <p className="form-error">{errors.address.message}</p>
-                    )}
-                </div>
-                <div className="form-field">
-                    <label htmlFor="city">
-                        City
-                    </label>
-
-                    <input
-                        id="city"
-                        type="text"
+                    <TextField
+                        label="City"
+                        fullWidth
                         {...register("city")}
+                        error={Boolean(errors.city)}
+                        helperText={errors.city?.message}
                     />
 
-                    {errors.city && (
-                        <p className="form-error">{errors.city.message}</p>
-                    )}
-                </div>
-                <div className="form-field">
-                    <label htmlFor="state">
-                        State
-                    </label>
-
-                    <input
-                        id="state"
-                        type="text"
-                        maxLength={2}
+                    <TextField
+                        label="State"
+                        fullWidth
+                        slotProps={{
+                            htmlInput: {
+                                maxLength: 2,
+                            },
+                        }}
                         {...register("state")}
+                        error={Boolean(errors.state)}
+                        helperText={errors.state?.message}
                     />
 
-                    {errors.state && (
-                        <p className="form-error">{errors.state.message}</p>
-                    )}
-                </div>
-                <div className="form-field">
-                    <label htmlFor="zipCode">
-                        ZIP Code
-                    </label>
-
-                    <input
-                        id="zipCode"
-                        type="text"
+                    <TextField
+                        label="ZIP Code"
+                        fullWidth
                         {...register("zipCode")}
+                        error={Boolean(errors.zipCode)}
+                        helperText={errors.zipCode?.message}
                     />
 
-                    {errors.zipCode && (
-                        <p className="form-error">{errors.zipCode.message}</p>
-                    )}
-                </div>
-                <div className="form-field">
-                    <label htmlFor="units">
-                        Total Units
-                    </label>
-
-                    <input
-                        id="units"
+                    <TextField
+                        label="Total Units"
                         type="number"
-                        min={1}
+                        fullWidth
                         {...register("units", {
                             valueAsNumber: true,
                         })}
+                        error={Boolean(errors.units)}
+                        helperText={errors.units?.message}
                     />
 
-                    {errors.units && (
-                        <p className="form-error">{errors.units.message}</p>
-                    )}
-                </div>
-                <div className="form-field">
-                    <label htmlFor="occupiedUnits">
-                        Occupied Units
-                    </label>
-
-                    <input
-                        id="occupiedUnits"
+                    <TextField
+                        label="Occupied Units"
                         type="number"
-                        min={0}
+                        fullWidth
                         {...register("occupiedUnits", {
                             valueAsNumber: true,
                         })}
+                        error={Boolean(errors.occupiedUnits)}
+                        helperText={errors.occupiedUnits?.message}
                     />
 
-                    {errors.occupiedUnits && (
-                        <p className="form-error">{errors.occupiedUnits.message}</p>
-                    )}
-                </div>
-                <div className="form-actions">
-                    <button
-                        type="button"
-                        onClick={() => navigate("/properties")}
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        sx={{ justifyContent: "flex-end" }}
                     >
-                        Cancel
-                    </button>
+                        <Button
+                            type="button"
+                            onClick={() => navigate("/properties")}
+                        >
+                            Cancel
+                        </Button>
 
-                    <button type="submit">
-                        Create Property
-                    </button>
-                </div>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                        >
+                            Create Property
+                        </Button>
+                    </Stack>
+                </Stack>
             </form>
-        </main>
+        </Box>
     );
 }
 

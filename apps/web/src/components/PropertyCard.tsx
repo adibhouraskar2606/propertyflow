@@ -1,42 +1,83 @@
+import {
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    Chip,
+    Stack,
+    Typography,
+} from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
+
 import type { Property } from "../types/property";
-import Button from "./Button";
-import "./PropertyCard.css";
 
 interface PropertyCardProps {
     property: Property;
 }
-
 function PropertyCard({ property }: PropertyCardProps) {
+    const navigate = useNavigate();
+
     const occupancyRate =
         property.units === 0
             ? 0
             : Math.round(
                 (property.occupiedUnits / property.units) * 100
             );
-    const navigate = useNavigate();
+
     return (
-        <article className="property-card">
-            <h2>{property.name}</h2>
+        <Card variant="outlined">
+            <CardContent>
+                <Typography variant="h6">
+                    {property.name}
+                </Typography>
 
-            <p>{property.address}</p>
+                <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 2 }}
+                >
+                    {property.address}
+                    <br />
 
-            <p>
-                {property.city}, {property.state} {property.zipCode}
-            </p>
+                    {property.city}, {property.state}{" "}
+                    {property.zipCode}
+                </Typography>
 
-            <p>Total units: {property.units}</p>
+                <Stack
+                    direction="row"
+                    sx={{
+                        flexWrap: "wrap",
+                        gap: 1,
+                    }}
+                >
+                    <Chip
+                        label={`${property.units} units`}
+                        size="small"
+                    />
 
-            <p>Occupied: {property.occupiedUnits}</p>
+                    <Chip
+                        label={`${property.occupiedUnits} occupied`}
+                        size="small"
+                    />
 
-            <p>Occupancy: {occupancyRate}%</p>
+                    <Chip
+                        label={`${occupancyRate}% occupancy`}
+                        size="small"
+                    />
+                </Stack>
+            </CardContent>
 
-            <Button
-                onClick={() => navigate(`/properties/${property.id}`)}
-            >
-                View Property
-            </Button>
-        </article>
+            <CardActions>
+                <Button
+                    onClick={() =>
+                        navigate(`/properties/${property.id}`)
+                    }
+                >
+                    View Property
+                </Button>
+            </CardActions>
+        </Card>
     );
 }
 

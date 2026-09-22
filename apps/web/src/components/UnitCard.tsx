@@ -1,4 +1,11 @@
 import type { Unit } from "../types/unit";
+import {
+  Card,
+  CardContent,
+  Chip,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 interface UnitCardProps {
   unit: Unit;
@@ -6,19 +13,35 @@ interface UnitCardProps {
 
 function UnitCard({ unit }: UnitCardProps) {
   return (
-    <article>
-      <h3>Unit {unit.unitNumber}</h3>
+    <Card variant="outlined">
+      <CardContent>
+        <Stack
+          direction="row"
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}
+        >
+          <Typography variant="h6">
+            Unit {unit.unitNumber}
+          </Typography>
 
-      <p>
-        {unit.bedrooms} bed • {unit.bathrooms} bath
-      </p>
+          <Chip
+            label={unit.status}
+            size="small"
+            variant="outlined"
+          />
+        </Stack>
 
-      <p>
-        Rent: ${unit.monthlyRent.toLocaleString()}/month
-      </p>
+        <Typography color="text.secondary">
+          {unit.bedrooms} bed • {unit.bathrooms} bath
+        </Typography>
 
-      <p>Status: {unit.status}</p>
-    </article>
+        <Typography sx={{ mt: 1 }}>
+          ${unit.monthlyRent.toLocaleString()} / month
+        </Typography>
+      </CardContent>
+    </Card>
   );
 }
 
