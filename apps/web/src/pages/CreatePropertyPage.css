@@ -1,0 +1,29 @@
+.property-form {
+  max-width: 600px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-field label {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.form-field input {
+  padding: 0.5rem;
+}
+
+.form-error {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}

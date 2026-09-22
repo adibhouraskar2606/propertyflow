@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import PropertyCard from "../components/PropertyCard";
 import { properties } from "../services/mockProperties";
 import { useState } from "react";
 
 function PropertiesPage() {
+    const navigate = useNavigate();
+
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredProperties = properties.filter((property) => {
@@ -30,6 +33,13 @@ function PropertiesPage() {
             <h1>Properties</h1>
 
             <p>Manage your Rental Property Portfolio</p>
+
+            <button
+                type="button"
+                onClick={() => navigate("/properties/new")}
+            >
+                + Add Property
+            </button>
 
             <p>
                 {properties.length} properties • {totalUnits} units • {occupiedUnits} occupied
