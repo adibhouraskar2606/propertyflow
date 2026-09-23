@@ -2,6 +2,15 @@ import { useNavigate } from "react-router-dom";
 import PropertyCard from "../components/PropertyCard";
 import { properties } from "../services/mockProperties";
 import { useState } from "react";
+import {
+    Box,
+    Button,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
+
+import AddIcon from "@mui/icons-material/Add";
 
 function PropertiesPage() {
     const navigate = useNavigate();
@@ -29,42 +38,69 @@ function PropertiesPage() {
     );
 
     return (
-        <main>
-            <h1>Properties</h1>
-
-            <p>Manage your Rental Property Portfolio</p>
-
-            <button
-                type="button"
-                onClick={() => navigate("/properties/new")}
+        <Box>
+            <Stack
+                direction="row"
+                sx={{ mb: 3,
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                 }}
             >
-                + Add Property
-            </button>
+                <Box>
+                    <Typography variant="h4">
+                        Properties
+                    </Typography>
 
-            <p>
-                {properties.length} properties • {totalUnits} units • {occupiedUnits} occupied
-            </p>
+                    <Typography color="text.secondary">
+                        Manage your rental property portfolio.
+                    </Typography>
+                </Box>
 
-            <input
-                type="text"
-                placeholder="Search properties..."
+                <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={() => navigate("/properties/new")}
+                >
+                    Add Property
+                </Button>
+            </Stack>
+
+            <Typography sx={{ mb: 2 }}>
+                {properties.length} properties • {totalUnits} units •{" "}
+                {occupiedUnits} occupied
+            </Typography>
+
+            <TextField
+                label="Search properties"
                 value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
+                onChange={(event) =>
+                    setSearchTerm(event.target.value)
+                }
+                size="small"
+                sx={{
+                    mb: 3,
+                    width: {
+                        xs: "100%",
+                        sm: 400,
+                    },
+                }}
             />
 
             {filteredProperties.length === 0 ? (
-                <p>No properties found.</p>
+                <Typography color="text.secondary">
+                    No properties found.
+                </Typography>
             ) : (
-                <section>
+                <Stack spacing={2}>
                     {filteredProperties.map((property) => (
                         <PropertyCard
                             key={property.id}
                             property={property}
                         />
                     ))}
-                </section>
+                </Stack>
             )}
-        </main>
+        </Box>
     );
 }
 

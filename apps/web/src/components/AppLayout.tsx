@@ -1,40 +1,114 @@
-import { NavLink, Outlet } from "react-router-dom";
-import "./AppLayout.css";
+import {
+  AppBar,
+  Box,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+
+import {
+  Apartment,
+  Build,
+  Dashboard,
+} from "@mui/icons-material";
+
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
 
 function AppLayout() {
-    return (
-        <div>
-            <header>
-                <h1>PropertyFlow</h1>
+  const navigate = useNavigate();
+  const location = useLocation();
+  const drawerWidth = 240;
 
-                <nav className="app-nav">
-                    <NavLink
-                        to="/"
-                        end
-                        className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                        Dashboard
-                    </NavLink>
-                    <NavLink
-                        to="/properties"
-                        className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                        Properties
-                    </NavLink>
-                    <NavLink
-                        to="/maintenance"
-                        className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                        Maintenance
-                    </NavLink>
-                </nav>
-            </header>
+  return (
+    <Box sx={{ display: "flex" }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+      >
+        <Toolbar>
+          <Typography variant="h6" noWrap>
+            PropertyFlow
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
-            <hr />
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
 
-            <Outlet />
-        </div>
-    );
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        <Toolbar />
+
+        <List>
+          <ListItemButton
+            selected={location.pathname === "/"}
+            onClick={() => navigate("/")}
+          >
+            <ListItemIcon>
+              <Dashboard />
+            </ListItemIcon>
+
+            <ListItemText primary="Dashboard" />
+          </ListItemButton>
+
+          <ListItemButton
+            selected={location.pathname.startsWith(
+              "/properties"
+            )}
+            onClick={() => navigate("/properties")}
+          >
+            <ListItemIcon>
+              <Apartment />
+            </ListItemIcon>
+
+            <ListItemText primary="Properties" />
+          </ListItemButton>
+
+          <ListItemButton
+            selected={location.pathname.startsWith(
+              "/maintenance"
+            )}
+            onClick={() => navigate("/maintenance")}
+          >
+            <ListItemIcon>
+              <Build />
+            </ListItemIcon>
+
+            <ListItemText primary="Maintenance" />
+          </ListItemButton>
+        </List>
+      </Drawer>
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+        }}
+      >
+        <Toolbar />
+
+        <Outlet />
+      </Box>
+    </Box>
+  );
 }
 
 export default AppLayout;
