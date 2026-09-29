@@ -1,49 +1,29 @@
 package com.propertyflow.property.service;
 
-import java.util.List;
-
+import com.propertyflow.property.model.Property;
+import com.propertyflow.property.repository.PropertyRepository;
 import org.springframework.stereotype.Service;
 
-import com.propertyflow.property.model.Property;
+import java.util.List;
 
 @Service
 public class PropertyService {
+
+    private final PropertyRepository propertyRepository;
+
+    public PropertyService(
+            PropertyRepository propertyRepository
+    ) {
+        this.propertyRepository = propertyRepository;
+    }
+
     public List<Property> getProperties() {
-        return List.of(
-                new Property(
-                        1L,
-                        "Mountain View Townhomes",
-                        "1250 Harrison Blvd",
-                        "Ogden",
-                        "UT",
-                        "84403",
-                        3,
-                        3),
-                new Property(
-                        2L,
-                        "Downtown Apartments",
-                        "245 Washington Blvd",
-                        "Ogden",
-                        "UT",
-                        "84401",
-                        8,
-                        6),
-                new Property(
-                        3L,
-                        "Canyon Ridge Apartments",
-                        "780 Canyon Road",
-                        "Ogden",
-                        "UT",
-                        "84404",
-                        6,
-                        4));
+        return propertyRepository.findAll();
     }
 
     public Property getPropertyById(Long id) {
-        return getProperties()
-                .stream()
-                .filter(property -> property.id().equals(id))
-                .findFirst()
+        return propertyRepository
+                .findById(id)
                 .orElse(null);
     }
 }

@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: propertyflow-postgres
+
+    environment:
+      POSTGRES_DB: propertyflow
+      POSTGRES_USER: propertyflow
+      POSTGRES_PASSWORD: propertyflow
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - propertyflow-postgres-data:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U propertyflow -d propertyflow"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  propertyflow-postgres-data:
