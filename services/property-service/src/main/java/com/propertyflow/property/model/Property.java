@@ -46,8 +46,7 @@ public class Property {
             String state,
             String zipCode,
             int units,
-            int occupiedUnits
-    ) {
+            int occupiedUnits) {
         this.name = name;
         this.address = address;
         this.city = city;
@@ -87,5 +86,22 @@ public class Property {
 
     public int getOccupiedUnits() {
         return occupiedUnits;
+    }
+
+    public void update(
+            String name,
+            String address,
+            String city,
+            String state,
+            String zipCode,
+            int units,
+            int occupiedUnits) {
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.units = units;
+        this.occupiedUnits = occupiedUnits;
     }
 }
