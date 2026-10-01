@@ -1,39 +1,70 @@
 package com.propertyflow.property.controller;
 
+import com.propertyflow.property.dto.CreatePropertyRequest;
+import com.propertyflow.property.dto.PropertyResponse;
+import com.propertyflow.property.dto.UpdatePropertyRequest;
+import com.propertyflow.property.service.PropertyService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
-import com.propertyflow.property.model.Property;
-import com.propertyflow.property.service.PropertyService;
-
 @RestController
-@RequestMapping("api/properties")
+@RequestMapping("/api/properties")
 public class PropertyController {
+
     private final PropertyService propertyService;
 
-    public PropertyController(PropertyService propertyService) {
+    public PropertyController(
+            PropertyService propertyService) {
         this.propertyService = propertyService;
     }
 
     @GetMapping
-    public List<Property> getProperties() {
+    public List<PropertyResponse> getProperties() {
         return propertyService.getProperties();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Property> getPropertyById(
+    public PropertyResponse getPropertyById(
             @PathVariable Long id) {
-        Property property = propertyService.getPropertyById(id);
-
-        if (property == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(property);
+        return propertyService.getPropertyById(id);
     }
 
+    @PostMapping
+    public ResponseEntity<PropertyResponse> createProperty(
+            @Valid @RequestBody CreatePropertyRequest request) {
+        PropertyResponse property = propertyService.createProperty(request);
+
+        return ResponseEntity
+                .created(
+                        URI.create(
+                                "/api/properties/" + property.id()))
+                .body(property);
+    }
+
+    @PutMapping("/{id}")
+    public PropertyResponse updateProperty(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdatePropertyRequest request) {
+        return propertyService.updateProperty(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProperty(
+            @PathVariable Long id) {
+        propertyService.deleteProperty(id);
+    }
 }
