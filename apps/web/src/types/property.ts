@@ -8,3 +8,13 @@ export interface Property {
   units: number;
   occupiedUnits: number;
 }
+
+export interface CreatePropertyRequest {
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  units: number;
+  occupiedUnits: number;
+}

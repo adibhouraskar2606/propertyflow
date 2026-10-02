@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createProperty } from "../api/propertiesApi";
 import {
+    Alert,
     Box,
     Button,
     Stack,
@@ -13,14 +15,22 @@ import {
     propertySchema,
     type PropertyFormData,
 } from "../schemas/propertySchema";
+import { useState } from "react";
+import { ApiError } from "../api/apiError";
 
 function CreatePropertyPage() {
     const navigate = useNavigate();
 
+    const [submitError, setSubmitError] =
+        useState<string | null>(null);
+
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: {
+            errors,
+            isSubmitting,
+        }
     } = useForm<PropertyFormData>({
         resolver: zodResolver(propertySchema),
         defaultValues: {
@@ -34,10 +44,29 @@ function CreatePropertyPage() {
         },
     });
 
-    const onSubmit = (data: PropertyFormData) => {
-        console.log("Property submitted:", data);
+    const onSubmit = async (
+        data: PropertyFormData,
+    ) => {
+        try {
+            setSubmitError(null);
 
-        navigate("/properties");
+            await createProperty(data);
+
+            navigate("/properties");
+        } catch (error) {
+            console.error(
+                "Failed to create property:",
+                error,
+            );
+
+            if (error instanceof ApiError) {
+                setSubmitError(error.message);
+            } else {
+                setSubmitError(
+                    "Unable to create property. Please try again.",
+                );
+            }
+        }
     };
 
     return (
@@ -122,6 +151,11 @@ function CreatePropertyPage() {
                         helperText={errors.occupiedUnits?.message}
                     />
 
+                    {submitError && (
+                        <Alert severity="error">
+                            {submitError}
+                        </Alert>
+                    )}
                     <Stack
                         direction="row"
                         spacing={2}
@@ -137,8 +171,11 @@ function CreatePropertyPage() {
                         <Button
                             type="submit"
                             variant="contained"
+                            disabled={isSubmitting}
                         >
-                            Create Property
+                            {isSubmitting
+                                ? "Creating..."
+                                : "Create Property"}
                         </Button>
                     </Stack>
                 </Stack>

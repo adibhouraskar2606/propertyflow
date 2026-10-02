@@ -1,19 +1,48 @@
 import { useNavigate } from "react-router-dom";
 import PropertyCard from "../components/PropertyCard";
-import { properties } from "../services/mockProperties";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getProperties } from "../api/propertiesApi";
 import {
+    Alert,
     Box,
     Button,
+    CircularProgress,
     Stack,
     TextField,
     Typography,
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
+import type { Property } from "../types/property";
 
 function PropertiesPage() {
     const navigate = useNavigate();
+
+    const [properties, setProperties] = useState<Property[]>([]);
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function loadProperties() {
+            try {
+                setIsLoading(true);
+                setError(null);
+
+                const data = await getProperties();
+
+                setProperties(data);
+            } catch (err) {
+                console.error(err);
+                setError("Unable to load properties.");
+            } finally {
+                setIsLoading(false);
+            }
+        }
+
+        void loadProperties();
+    }, []);
 
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -36,15 +65,32 @@ function PropertiesPage() {
         (total, property) => total + property.occupiedUnits,
         0
     );
+    if (error) {
+        return (
+            <Box sx={{ p: 3 }}>
+                <Alert severity="error">
+                    {error}
+                </Alert>
+            </Box>
+        );
+    }
 
+    if (isLoading) {
+        return (
+            <Box sx={{ p: 3 }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
     return (
         <Box>
             <Stack
                 direction="row"
-                sx={{ mb: 3,
+                sx={{
+                    mb: 3,
                     justifyContent: "space-between",
                     alignItems: "center"
-                 }}
+                }}
             >
                 <Box>
                     <Typography variant="h4">
